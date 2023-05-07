@@ -8,7 +8,7 @@ df2 = pd.read_csv('DAX.csv')
 
 app = Dash(__name__)
 
-fig = px.line(df)
+fig = px.line(df, y = 'Prediction_Neural')
 fig1 = px.line(df1, x='Date', y="Open")
 fig2 = px.line(df2, x='Date', y="Open")
 
@@ -20,10 +20,10 @@ app.layout = html.Div([
                     " Alle Diagramme werden mit der Auswahl aktualisiert."),
     html.Hr(),
     dcc.RadioItems(options=['Open', 'High', 'Low','Close'], value='Open', id='controls-and-radio-item'),
-    html.H1(children = 'Microsoft (MSFT)'),
-    dcc.Graph(id='graph-content', figure = fig),
     html.H1(children= 'Tesla (TSL)'),
     dcc.Graph(id='graph-content1', figure = fig1),
+    html.H1(children = 'Prediction Neural'),
+    dcc.Graph(id='graph-content', figure = fig),
     html.H1(children='DAX'),
     dcc.Graph(id='graph-content2', figure = fig2)
 ])
