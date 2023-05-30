@@ -4,13 +4,13 @@ import pandas as pd
 
 df = pd.read_csv('Prediction_neural.csv')
 df1 = pd.read_csv('TSLA.csv') #modified .csv
-df2 = pd.read_csv('DAX.csv')
+df2 = pd.read_csv('Prediction_LSTM_test.csv')
 
 app = Dash(__name__)
 
 fig = px.line(df, y = 'Prediction_Neural')
 fig1 = px.line(df1, x='Date', y="Open")
-fig2 = px.line(df2, x='Date', y="Open")
+fig2 = px.line(df2, y='Prediction_LSTM')
 
 
 app.layout = html.Div([
@@ -24,7 +24,7 @@ app.layout = html.Div([
     dcc.Graph(id='graph-content1', figure = fig1),
     html.H1(children = 'Prediction Neural'),
     dcc.Graph(id='graph-content', figure = fig),
-    html.H1(children='DAX'),
+    html.H1(children='Prediction_LSTM_test'),
     dcc.Graph(id='graph-content2', figure = fig2)
 ])
 
