@@ -7,7 +7,7 @@ from keras.layers import LSTM, Dense, Dropout
 
 df = pd.read_csv('TSLA.csv')
 
-df = df['Open'].values
+df = df['Close'].values #Open
 df = df.reshape(-1, 1)
 
 dataset_train = np.array(df[:int(df.shape[0]*0.7)])
