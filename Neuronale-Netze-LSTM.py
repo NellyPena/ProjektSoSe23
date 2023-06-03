@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
+from tensorflow import keras 
 from keras.models import Sequential, load_model
 from keras.layers import LSTM, Dense, Dropout
 
 df = pd.read_csv('TSLA.csv')
+company = 'TSLA'
 
 df = df['Close'].values #Open
 df = df.reshape(-1, 1)
@@ -48,7 +50,7 @@ x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(x_train, y_train, epochs=25, batch_size=32)
+model.fit(x_train, y_train, epochs=5, batch_size=32) #epochs25
 #model.save('stock_prediction.h5')#model training operations, not required.
 
 #model = load_model('stock_prediction.h5')
@@ -57,11 +59,13 @@ predictions = model.predict(x_test)
 predictions = scaler.inverse_transform(predictions)
 y_test_scaled = scaler.inverse_transform(y_test.reshape(-1, 1))
 
-fig, ax = plt.subplots(figsize=(16,8))
-ax.set_facecolor('#000041')
-ax.plot(y_test_scaled, color='red', label='Original price')
-plt.plot(predictions, color='cyan', label='Predicted price')
+#### PLOT
+plt.plot(y_test_scaled, color="black", label=f"{company} real prices")
+plt.plot(predictions, color="blue", label=f"{company} predicted prices")
+plt.title(f"{company} Share Price Vs Prediction") #plot not showing after adding this line
 plt.legend()
+plt.show()
+
 
 #print(predicted_prices)
 predictions = predictions.reshape(-1)
