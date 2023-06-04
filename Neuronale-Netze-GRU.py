@@ -10,9 +10,9 @@ from keras.layers import Dense,Dropout,GRU
 
 #Cargar los datos
 company = 'TSLA' #used in the graph plot
-#hist = pd.read_csv('TSLA.csv') #2012 - 2019
+hist = pd.read_csv('TSLA.csv') #2012 - 2019
 df = pd.read_csv('TSLA.csv')
-hist =np.array(df[:int(df.shape[0]*0.7)])
+#hist =np.array(df[:int(df.shape[0]*0.7)])
 
 print(hist)
 
@@ -55,8 +55,8 @@ model.fit(x_train,y_train, epochs=25, batch_size=32) #batch size: the model is g
 
 #######################################test model accuracy on existing data
 #cargar los datos de test
-#hist_test = pd.read_csv('TSLA_testdata.csv') #2020 to date
-hist_test = np.array(df[int(df.shape[0]*0.7):]) #new data, not used before
+hist_test = pd.read_csv('TSLA_testdata.csv') #2020 to date
+#hist_test = np.array(df[int(df.shape[0]*0.7):]) #new data, not used before
 
 actual_prices  = hist_test['Close'].values
 
@@ -107,5 +107,4 @@ predicted_prices = predicted_prices.reshape(-1)
 predicted_prices = pd.DataFrame(data={"Prediction_GRU" : predicted_prices})
 #predicted_prices = np.asarray(predicted_prices)
 print(predicted_prices)
-#predicted_prices.tofile('Prediction_neural.csv', sep = ',')
 predicted_prices.to_csv("Prediction_GRU.csv", sep=',',index=False)
