@@ -6,8 +6,8 @@ from tensorflow import keras
 from keras.models import Sequential, load_model
 from keras.layers import LSTM, Dense, Dropout
 
-df = pd.read_csv('TSLA.csv')
-company = 'TSLA'
+df = pd.read_csv('DAX.csv')
+company = 'DAX'
 
 df = df['Close'].values #Open
 df = df.reshape(-1, 1)
@@ -15,6 +15,7 @@ df = df.reshape(-1, 1)
 dataset_train = np.array(df[:int(df.shape[0]*0.7)])
 dataset_test = np.array(df[int(df.shape[0]*0.7):])
 
+# preparar los datos
 scaler = MinMaxScaler(feature_range=(0,1))
 dataset_train = scaler.fit_transform(dataset_train)
 dataset_test = scaler.transform(dataset_test)
@@ -59,13 +60,27 @@ predictions = model.predict(x_test)
 predictions = scaler.inverse_transform(predictions)
 y_test_scaled = scaler.inverse_transform(y_test.reshape(-1, 1))
 
+print(x_test.shape)
+
+X_FUTURE = 5
+future_predictions = np.array([])
+last = x_test[-1]
+for i in range(X_FUTURE):
+  curr_prediction = model.predict(np.array([last]))
+  print(curr_prediction)
+  last = np.concatenate([last[1:], curr_prediction])
+  future_predictions = np.concatenate([future_predictions, curr_prediction[0]])
+future_predictions = scaler.inverse_transform([future_predictions])[0]
+print(future_predictions)
+
 #### PLOT
+plt.plot(y_train, color="red", label=f"{company} real prices")
+plt.plot(future_predictions, color="tomato", label=f"{company} real prices")
 plt.plot(y_test_scaled, color="black", label=f"{company} real prices")
-plt.plot(predictions, color="blue", label=f"{company} predicted prices")
+plt.plot(predictions, color="steelblue", label=f"{company} predicted prices")
 plt.title(f"{company} Share Price Vs Prediction") #plot not showing after adding this line
 plt.legend()
 plt.show()
-
 
 #print(predicted_prices)
 predictions = predictions.reshape(-1)
