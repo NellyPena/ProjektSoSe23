@@ -74,8 +74,7 @@ future_predictions = scaler.inverse_transform([future_predictions])[0]
 print(future_predictions)
 
 #### PLOT
-plt.plot(y_train, color="red", label=f"{company} real prices")
-plt.plot(future_predictions, color="tomato", label=f"{company} real prices")
+plt.plot(future_predictions, color="tomato", label=f"{company} future X days prices")
 plt.plot(y_test_scaled, color="black", label=f"{company} real prices")
 plt.plot(predictions, color="steelblue", label=f"{company} predicted prices")
 plt.title(f"{company} Share Price Vs Prediction") #plot not showing after adding this line
