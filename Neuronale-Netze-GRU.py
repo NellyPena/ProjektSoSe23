@@ -62,7 +62,7 @@ predictions = model.predict(x_test)
 predictions = scaler.inverse_transform(predictions)
 y_test_scaled = scaler.inverse_transform(y_test.reshape(-1, 1))
 
-X_FUTURE = 5 #always using x[-1] from x_test for the prediction
+X_FUTURE = 50 #always using x[-1] from x_test for the prediction
 future_predictions = np.array([])
 last = x_test[-1]
 for i in range(X_FUTURE):
