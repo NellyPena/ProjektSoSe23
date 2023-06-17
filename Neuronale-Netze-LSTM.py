@@ -80,7 +80,6 @@ plt.plot(predictions, color="steelblue", label=f"{company} predicted prices")
 plt.title(f"{company} Share Price Vs Prediction") #plot not showing after adding this line
 plt.legend()
 plt.show()
-
 #print(predicted_prices)
 predictions = predictions.reshape(-1)
 predictions = pd.DataFrame(data={"Prediction_LSTM" : predictions})
