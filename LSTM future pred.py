@@ -103,7 +103,7 @@ plt.plot(valid[['Close', 'Predictions']])
 plt.legend(['Train', 'Validation', 'Predictions'], loc='lower right')
 plt.show()
 
-X_FUTURE = 5
+X_FUTURE = 100
 predictions = np.array([])
 last = x_test[-1]
 for i in range(X_FUTURE):
@@ -119,7 +119,7 @@ from datetime import timedelta
 dicts = []
 curr_date = data.index[-1]
 for i in range(X_FUTURE):
-  curr_date = curr_date + timedelta(days=1)
+  curr_date = curr_date + 1
   dicts.append({'Predictions':predictions[i], "Date": curr_date})
 
 new_data = pd.DataFrame(dicts).set_index("Date")
