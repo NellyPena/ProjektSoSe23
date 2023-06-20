@@ -55,9 +55,9 @@ x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(x_train, y_train, epochs=25, batch_size=32) #epochs25
-model.save('stock_prediction.h5') #model training operations, not required.
+model.save('stock_prediction_GRU.h5') #model training operations, not required.
 
-model = load_model('stock_prediction.h5')
+model = load_model('stock_prediction_GRU.h5')
 
 predictions = model.predict(x_test)
 predictions = scaler.inverse_transform(predictions)

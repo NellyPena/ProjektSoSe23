@@ -5,9 +5,11 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow import keras 
 from keras.models import Sequential, load_model
 from keras.layers import LSTM, Dense, Dropout
+from sklearn.metrics import mean_squared_error
 
-df = pd.read_csv('DAX.csv')
-company = 'DAX'
+df = pd.read_csv('ALV.csv')
+company = 'ALV'
+window_size = 50
 
 df = df['Close'].values #Open
 df = df.reshape(-1, 1)
@@ -23,8 +25,8 @@ dataset_test = scaler.transform(dataset_test)
 def create_dataset(df):
     x = []
     y = []
-    for i in range(50, df.shape[0]): #50
-        x.append(df[i-50:i, 0])  #50
+    for i in range(window_size, df.shape[0]): #50
+        x.append(df[i-window_size:i, 0])  #50
         y.append(df[i, 0])
     x = np.array(x)
     y = np.array(y)
@@ -52,9 +54,9 @@ x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
 model.compile(loss='mean_squared_error', optimizer='adam')
 model.fit(x_train, y_train, epochs=5, batch_size=32) #epochs25
-#model.save('stock_prediction.h5')#model training operations, not required.
+model.save('stock_prediction_LSTM.h5')#model training operations, not required.
 
-#model = load_model('stock_prediction.h5')
+model = load_model('stock_prediction_LSTM.h5')
 
 predictions = model.predict(x_test)
 predictions = scaler.inverse_transform(predictions)
@@ -73,13 +75,28 @@ for i in range(X_FUTURE):
 future_predictions = scaler.inverse_transform([future_predictions])[0]
 print(future_predictions)
 
+###join lines 
+dicts = []
+last_day = len(y_test)-1 #-1 -2 reduces gap but means prediction on same day from both lines
+for i in range(X_FUTURE):
+  last_day = last_day + 1
+  dicts.append({'Predictions':future_predictions[i], "Date": last_day})
+
+new_data = pd.DataFrame(dicts).set_index("Date")
+
+#### Mean Squared Error
+mse = mean_squared_error(y_test_scaled, predictions)
+print("Mean Squared Error:", mse)
+
 #### PLOT
-plt.plot(future_predictions, color="tomato", label=f"{company} future X days prices")
+#plt.plot(future_predictions, color="tomato", label=f"{company} future X days prices")
 plt.plot(y_test_scaled, color="black", label=f"{company} real prices")
 plt.plot(predictions, color="steelblue", label=f"{company} predicted prices")
+plt.plot(new_data, color="tomato", label=f"{company} Future {X_FUTURE} Days")
 plt.title(f"{company} Share Price Vs Prediction") #plot not showing after adding this line
 plt.legend()
 plt.show()
+
 #print(predicted_prices)
 predictions = predictions.reshape(-1)
 predictions = pd.DataFrame(data={"Prediction_LSTM" : predictions})
