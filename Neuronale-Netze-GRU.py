@@ -10,8 +10,8 @@ from sklearn.metrics import mean_squared_error
 
 import Constants 
 
-df = pd.read_csv('^MDAXI_2206.csv')
-company = '^MDAXI'
+df = pd.read_csv('TSLA5Y.csv')
+company = 'TSLA(5Y)'
 window_size = 50
 
 df = df['Close'].values #Open
@@ -85,9 +85,11 @@ for i in range(Constants.X_FUTURE):
 
 new_data = pd.DataFrame(dicts).set_index("Date")
 
-#### Mean Squared Error
+#### Mean Squared Error + .csv
 mse = mean_squared_error(y_test_scaled, predictions)
 print("Mean Squared Error:", mse)
+mse = pd.DataFrame({mse})
+mse.to_csv(f"MSE_GRU_{company}.csv", sep=',',index=False,header=False)
 
 #### PLOT
 #plt.plot(future_predictions, color="tomato", label=f"{company} future X days prices")
@@ -109,6 +111,3 @@ predictions.to_csv(f"Prediction_GRU_{company}.csv", sep=',',index=False)
 #print(new_data)
 #print(future_predictions)
 #print(mse)
-
-all_data = df
-all_data.insert(1,"Prediction_")

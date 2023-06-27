@@ -7,20 +7,20 @@ import Constants
 company_config = [
     {
         "company_name": "TSLA",
-        "company_header": "Tesla (TSLA)",
-        "input_file": "TSLA.csv",
-        "predictions_lstm": "Prediction_LSTM.csv",
-        "predictions_gru": "Prediction_GRU.csv",
-        "predictions_LR": "Prediction_LR.csv",
+        "company_header": "Tesla (TSLA) - 1 Year",
+        "input_file": "TSLA1Y.csv",
+        "predictions_lstm": "Prediction_LSTM_TSLA(1Y).csv",
+        "predictions_gru": "Prediction_GRU_TSLA(1Y).csv", #change to GRU
+        "predictions_LR": "Prediction_LR_TSLA(1Y).csv", #change to LR
         "columns_options": ['Open', 'High', 'Low','Close']
     },
     {
-        "company_name": "MSFT",
-        "company_header": "Microsoft (MSFT)",
-        "input_file": "MSFT.csv",
-        "predictions_lstm": "Prediction_LSTM_MSFT.csv",
-        "predictions_gru": "Prediction_GRU_MSFT.csv",
-        "predictions_LR": "Prediction_LR_MSFT.csv",
+        "company_name": "TSLA", #prueba de segunda empresa
+        "company_header": "Tesla (TSLA) - 5 Years",
+        "input_file": "TSLA5Y.csv",
+        "predictions_lstm": "Prediction_LSTM_TSLA(5Y).csv",
+        "predictions_gru": "Prediction_GRU_TSLA(5Y).csv", #change to GRU
+        "predictions_LR": "Prediction_LR_TSLA(5Y).csv", #change to LR
         "columns_options": ['Open', 'High', 'Low','Close']
     }
 ]

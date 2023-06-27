@@ -9,8 +9,8 @@ from sklearn.metrics import mean_squared_error
 
 import Constants
 
-df = pd.read_csv('ALV.csv')
-company = 'ALV'
+df = pd.read_csv('TSLA5Y.csv')
+company = 'TSLA(5Y)'
 window_size = 50
 
 df = df['Close'].values #Open
@@ -41,21 +41,21 @@ x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
 model = Sequential()
-model.add(LSTM(units=96, return_sequences=True, input_shape=(x_train.shape[1], 1)))
-model.add(Dropout(0.2))
-model.add(LSTM(units=96,return_sequences=True))
-model.add(Dropout(0.2))
-model.add(LSTM(units=96,return_sequences=True))
-model.add(Dropout(0.2))
-model.add(LSTM(units=96))
-model.add(Dropout(0.2))
+model.add(LSTM(units=50, return_sequences=True, input_shape=(x_train.shape[1], 1)))
+model.add(Dropout(0.0))
+model.add(LSTM(units=50,return_sequences=True))
+model.add(Dropout(0.0))
+model.add(LSTM(units=50,return_sequences=True))
+model.add(Dropout(0.0))
+model.add(LSTM(units=50))
+model.add(Dropout(0.0))
 model.add(Dense(units=1))
 
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(x_train, y_train, epochs=5, batch_size=32) #epochs25
+model.fit(x_train, y_train, epochs=100, batch_size=32) #epochs25
 model.save('stock_prediction_LSTM.h5')#model training operations, not required.
 
 model = load_model('stock_prediction_LSTM.h5')
@@ -85,9 +85,11 @@ for i in range(Constants.X_FUTURE):
 
 new_data = pd.DataFrame(dicts).set_index("Date")
 
-#### Mean Squared Error
+#### Mean Squared Error + .csv
 mse = mean_squared_error(y_test_scaled, predictions)
 print("Mean Squared Error:", mse)
+mse = pd.DataFrame({mse})
+mse.to_csv(f"MSE_LSTM_{company}.csv", sep=',',index=False,header=False)
 
 #### PLOT
 #plt.plot(future_predictions, color="tomato", label=f"{company} future X days prices")
@@ -104,12 +106,4 @@ predictions = pd.DataFrame(data={"Prediction_LSTM" : predictions})
 #predicted_prices = np.asarray(predicted_prices)
 print(predictions)
 #predicted_prices.tofile('Prediction_neural.csv', sep = ',')
-predictions.to_csv("Prediction_LSTM.csv", sep=',',index=False)
-
-##
-new_data = new_data.reshape(-1)
-new_data = pd.DataFrame(data={"Prediction_LSTM_Future {company} " : new_data})
-#predicted_prices = np.asarray(predicted_prices)
-print(new_data)
-#predicted_prices.tofile('Prediction_neural.csv', sep = ',')
-new_data.to_csv("Prediction_LSTM.csv", sep=',',index=False)
+predictions.to_csv(f"Prediction_LSTM_{company}.csv", sep=',',index=False)
