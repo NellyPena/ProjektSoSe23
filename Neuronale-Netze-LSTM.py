@@ -7,6 +7,8 @@ from keras.models import Sequential, load_model
 from keras.layers import LSTM, Dense, Dropout
 from sklearn.metrics import mean_squared_error
 
+import Constants
+
 df = pd.read_csv('ALV.csv')
 company = 'ALV'
 window_size = 50
@@ -64,10 +66,9 @@ y_test_scaled = scaler.inverse_transform(y_test.reshape(-1, 1))
 
 print(x_test.shape)
 
-X_FUTURE = 5
 future_predictions = np.array([])
 last = x_test[-1]
-for i in range(X_FUTURE):
+for i in range(Constants.X_FUTURE):
   curr_prediction = model.predict(np.array([last]))
   print(curr_prediction)
   last = np.concatenate([last[1:], curr_prediction])
@@ -78,7 +79,7 @@ print(future_predictions)
 ###join lines 
 dicts = []
 last_day = len(y_test)-1 #-1 -2 reduces gap but means prediction on same day from both lines
-for i in range(X_FUTURE):
+for i in range(Constants.X_FUTURE):
   last_day = last_day + 1
   dicts.append({'Predictions':future_predictions[i], "Date": last_day})
 
@@ -92,7 +93,7 @@ print("Mean Squared Error:", mse)
 #plt.plot(future_predictions, color="tomato", label=f"{company} future X days prices")
 plt.plot(y_test_scaled, color="black", label=f"{company} real prices")
 plt.plot(predictions, color="steelblue", label=f"{company} predicted prices")
-plt.plot(new_data, color="tomato", label=f"{company} Future {X_FUTURE} Days")
+plt.plot(new_data, color="tomato", label=f"{company} Future {Constants.X_FUTURE} Days")
 plt.title(f"{company} Share Price Vs Prediction") #plot not showing after adding this line
 plt.legend()
 plt.show()
@@ -104,3 +105,11 @@ predictions = pd.DataFrame(data={"Prediction_LSTM" : predictions})
 print(predictions)
 #predicted_prices.tofile('Prediction_neural.csv', sep = ',')
 predictions.to_csv("Prediction_LSTM.csv", sep=',',index=False)
+
+##
+new_data = new_data.reshape(-1)
+new_data = pd.DataFrame(data={"Prediction_LSTM_Future {company} " : new_data})
+#predicted_prices = np.asarray(predicted_prices)
+print(new_data)
+#predicted_prices.tofile('Prediction_neural.csv', sep = ',')
+new_data.to_csv("Prediction_LSTM.csv", sep=',',index=False)

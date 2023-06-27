@@ -8,8 +8,10 @@ from keras.models import Sequential, load_model
 from keras.layers import GRU, Dense, Dropout
 from sklearn.metrics import mean_squared_error
 
-df = pd.read_csv('ALV.csv')
-company = 'ALV'
+import Constants 
+
+df = pd.read_csv('^MDAXI_2206.csv')
+company = '^MDAXI'
 window_size = 50
 
 df = df['Close'].values #Open
@@ -64,10 +66,9 @@ predictions = scaler.inverse_transform(predictions)
 y_test_scaled = scaler.inverse_transform(y_test.reshape(-1, 1))
 
 
-X_FUTURE = 10 #always using x[-1] from x_test for the prediction
 future_predictions = np.array([])
 last = x_test[-1]
-for i in range(X_FUTURE):
+for i in range(Constants.X_FUTURE):
   curr_prediction = model.predict(np.array([last]))
   print(curr_prediction)
   last = np.concatenate([last[1:], curr_prediction])
@@ -78,7 +79,7 @@ print(future_predictions)
 ###join lines 
 dicts = []
 last_day = len(y_test)-1 #-1 -2 reduces gap but means prediction on same day from both lines
-for i in range(X_FUTURE):
+for i in range(Constants.X_FUTURE):
   last_day = last_day + 1
   dicts.append({'Predictions':future_predictions[i], "Date": last_day})
 
@@ -92,7 +93,7 @@ print("Mean Squared Error:", mse)
 #plt.plot(future_predictions, color="tomato", label=f"{company} future X days prices")
 plt.plot(y_test_scaled, color="black", label=f"{company} Real Prices")
 plt.plot(predictions, color="steelblue", label=f"{company} Predicted Prices")
-plt.plot(new_data, color="tomato", label=f"{company} Future {X_FUTURE} Days")
+plt.plot(new_data, color="tomato", label=f"{company} Future {Constants.X_FUTURE} Days")
 plt.title(f"{company} Share Price Vs Prediction") #plot not showing after adding this line
 plt.legend()
 plt.show()
@@ -103,4 +104,11 @@ predictions = pd.DataFrame(data={"Prediction_GRU" : predictions})
 #predicted_prices = np.asarray(predicted_prices)
 print(predictions)
 #predicted_prices.tofile('Prediction_neural.csv', sep = ',')
-predictions.to_csv("Prediction_GRU.csv", sep=',',index=False)
+predictions.to_csv(f"Prediction_GRU_{company}.csv", sep=',',index=False)
+
+#print(new_data)
+#print(future_predictions)
+#print(mse)
+
+all_data = df
+all_data.insert(1,"Prediction_")
