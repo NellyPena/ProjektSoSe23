@@ -10,15 +10,15 @@ from sklearn.metrics import mean_squared_error
 
 import Constants 
 
-df = pd.read_csv('TSLA5Y.csv')
-company = 'TSLA(5Y)'
-window_size = 50
+df = pd.read_csv('DAX_10y.csv')
+company = 'DAX_(10Y)'
+window_size = 30
 
 df = df['Close'].values #Open
 df = df.reshape(-1, 1)
 
-dataset_train = np.array(df[:int(df.shape[0]*0.7)])
-dataset_test = np.array(df[int(df.shape[0]*0.7):])
+dataset_train = np.array(df[:int(df.shape[0]*0.75)])
+dataset_test = np.array(df[int(df.shape[0]*0.75):])
 
 # preparar los datos
 scaler = MinMaxScaler(feature_range=(0,1))
@@ -45,11 +45,11 @@ model = Sequential()
 #layer specification
 model.add(GRU(units=50, return_sequences = True, input_shape=(x_train.shape[1],1))) #units can be changed, return = true for recurrent neural networks (as LSTM feeds information back, not only forward)
 #input shape is...
-model.add(Dropout(0.2)) #0.2
+#model.add(Dropout(0)) #0.2
 model.add(GRU(units=50, return_sequences = True))
-model.add(Dropout(0.2)) #0.2
+#model.add(Dropout(0)) #0.2
 model.add(GRU(units=50))
-model.add(Dropout(0.2)) #0.1
+#model.add(Dropout(0)) #0.1
 model.add(Dense(units=1)) #prediction of the next closing price
 
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
