@@ -4,14 +4,15 @@ import plotly.express as px
 import pandas as pd
 from datetime import datetime, timedelta
 
+#Hier werden alle Unternehmen hinzugefügt
 company_config = [
     {
-        "company_name": "Tesla", #ticker originalmente
-        "company_header": "Tesla (TSLA) - 1 Year",
-        "input_file": "TSLA(1Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_TSLA(1Y).csv", #change to LR
-        "columns_options": ['Open', 'High', 'Low','Close'],
-        "metadata": [{
+        "company_name": "Financial Dashboard", #Name des Unternehmens
+        "company_header": "Tesla (TSLA) - 1 Year", #Header
+        "input_file": "TSLA(1Y).csv", #Verlauf des Unternehmens
+        "future_predictions": "FuturePrediction_LSTM_TSLA(1Y).csv", #gelesene Datei
+        "columns_options": ['Open', 'High', 'Low','Close'], #Button-Möglichkeiten
+        "metadata": [{                                              #zuzeigende Text
             "name": "Hauptsitz",
             "value": "Austin"
         }, {
@@ -29,10 +30,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "Tesla", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "Tesla (TSLA) - 5 Years",
         "input_file": "TSLA(5Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_TSLA(5Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_TSLA(5Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -52,10 +53,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "Amazon", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "Amazon (AMZN) - 1 Year",
         "input_file": "AMZN(1Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_AMZN(1Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_AMZN(1Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -75,10 +76,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "Amazon", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "Amazon (AMZN) - 5 Years",
         "input_file": "AMZN(5Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_AMZN(5Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_AMZN(5Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -98,10 +99,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "Allianz", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "Allianz (ALV.DE) - 1 Year",
         "input_file": "ALV.DE(1Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_ALV.DE(1Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_ALV.DE(1Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -121,10 +122,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "Allianz", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "Allianz (ALV.DE) - 5 Years",
         "input_file": "ALV.DE(5Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_ALV.DE(5Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_ALV.DE(5Y).csv",
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -144,26 +145,26 @@ company_config = [
         }]
     },
     {
-        "company_name": "^MDAXI", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "^MDAXI - 1 Year",
         "input_file": "^MDAXI(1Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_^MDAXI(1Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_^MDAXI(1Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": []
     },
     {
-        "company_name": "^MDAXI", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "^MDAXI - 5 Years",
         "input_file": "^MDAXI(5Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_^MDAXI(5Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_^MDAXI(5Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": []
     },
     {
-        "company_name": "NVIDIA Corp", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "NVIDIA Corp (NVD.DE) - 1 Year",
         "input_file": "NVD.DE(1Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_NVD.DE(1Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_NVD.DE(1Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -183,10 +184,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "NVIDIA Corp", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "NVIDIA Corp (NVD.DE) - 5 Years",
         "input_file": "NVD.DE(5Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_NVD.DE(5Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_NVD.DE(5Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -206,7 +207,7 @@ company_config = [
         }]
     },
     {
-        "company_name": "Deutsche Post AG", #prueba de segunda empresa
+        "company_name": "Financial Dashboard",
         "company_header": "Deutsche Post AG (DPW.DE) - 1 Year",
         "input_file": "DPW.DE(1Y).csv",
         "future_predictions": "FuturePrediction_LSTM_DPW.DE(1Y).csv", #change to LR
@@ -229,10 +230,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "Deutsche Post AG", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "Deutsche Post AG (DPW.DE) - 5 Years",
         "input_file": "DPW.DE(5Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_DPW.DE(5Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_DPW.DE(5Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -252,10 +253,10 @@ company_config = [
         }]
     },      
     {
-        "company_name": "McDonald's Corporation", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "McDonald's Corporation (MDO.DE) - 1 Year",
         "input_file": "MDO.DE(1Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_MDO.DE(1Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_MDO.DE(1Y).csv", 
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -275,10 +276,10 @@ company_config = [
         }]
     },
     {
-        "company_name": "McDonald's Corporation", #prueba de segunda empresa
+        "company_name": "Financial Dashboard", 
         "company_header": "McDonald's Corporation (MDO.DE) - 5 Years",
         "input_file": "MDO.DE(5Y).csv",
-        "future_predictions": "FuturePrediction_LSTM_MDO.DE(5Y).csv", #change to LR
+        "future_predictions": "FuturePrediction_LSTM_MDO.DE(5Y).csv",
         "columns_options": ['Open', 'High', 'Low','Close'],
         "metadata": [{
             "name": "Hauptsitz",
@@ -309,13 +310,12 @@ fig1 = px.line(input_df, x='Date', y="Open")
 
 company_options = [{"label": company_config[n]["company_header"], "value": n} for n in range(len(company_config))]
 
+#Layout
 app.layout = html.Div([
     html.H1(children=ticker, style={'textAlign':'center'}),
     html.Hr(),
     html.H1(children = 'Analyse:', style={'textAlign':'left'}),
     dcc.Dropdown(options=company_options, value=1, id='company-control'),
-#    html.P(children= "Hier kann man zwischen die unterschiedlichen Aktienkurse auswählen."
-#                    "Alle Diagramme werden mit der Auswahl aktualisiert."),
     html.Div([
         html.H1(children=current_company["company_header"], id="company-header"),
         html.Div(id="company-metadata"),
@@ -341,7 +341,7 @@ app.layout = html.Div([
 ])
 
 
-#### callback for options and headings
+#callback für Optinonen und Headers
 @callback(
     Output('company-header', 'children'),
     Output('controls-and-radio-item', 'options'),
@@ -371,7 +371,7 @@ def update_metadata(company_index):
         metadata_structure.append(html.Br())
     return metadata_structure
 
-#### callback for the second graph
+#Callback für die 2. Graph
 @callback(
     Output('graph-history', 'figure'),
     Output('historic-min', 'children'),
@@ -394,7 +394,7 @@ def convert_index_to_date(index, base_date):
     end_date = converted_date + timedelta(days=index)
     return end_date
 
-#### callback for the first graph
+#Callback für die 1. Graph
 @callback(
     Output('graph-comparison', 'figure'),
     Input('company-control', 'value')
@@ -412,7 +412,7 @@ def update_comparison(company_index):
 
     max_date = max(history_df["Date"]) #debe ser el 70%
     future_df["Date"] = future_df.index.to_series().map(lambda index : convert_index_to_date(index, max_date))
-    # Create figure
+    #Figure erstellen
     fig = px.line(dataset_train, x="Date", y="Close")
     
     fig.add_traces(list(px.line(dataset_test, y="Close", x="Date").update_traces(line_color="darkgreen", name="Test data", showlegend=True).select_traces()))
@@ -424,4 +424,4 @@ def update_comparison(company_index):
 if __name__ == '__main__':
     app.run_server(debug=True)
 
-    #multiple outputs
+    
