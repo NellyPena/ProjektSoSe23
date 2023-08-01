@@ -7,28 +7,28 @@ import pickle
 import os
 import Constants
 
-df = pd.read_csv('TSLA1Y.csv')
-company = 'TSLA(1Y)'
+df = pd.read_csv('DPW.DE(3).csv')
+company = 'DPW.DE(3)'
 
 dates = list(range(0,int(len(df))))
 prices = df['Close']
-#Impute missing values (NaN)
+#Fehlende Werte imputieren (NaN)
 prices[np.isnan(prices)] = np.median(prices[~np.isnan(prices)])
 
-#Plot Original Data
+#Plotten von Originaldaten
 plt.plot(df['Close'], label='Close Price history')
 plt.title('Linear Regression | Time vs. Price (Original Data)')
 plt.legend()
 plt.xlabel('Date Integer')
 plt.show()
 
-#Convert to numpy array and reshape them
+#In Numpy-Array konvertieren und reshape 
 dates = np.asanyarray(dates)
 prices = np.asanyarray(prices)
 dates = np.reshape(dates,(len(dates),1))
 prices = np.reshape(prices, (len(prices), 1))
 
-#Load Pickle File to get the previous saved model accuracy
+#Pickle-Datei laden, um die zuvor gespeicherte Modellgenauigkeit zu erhalten
 try:
   pickle_in = open("prediction.pickle", "rb")
   reg = pickle.load(pickle_in)
@@ -37,7 +37,7 @@ try:
 except:
   pass
 
-#Get the highest accuracy model
+#Das genaueste Modell erhalten
 best = 0
 for _ in range(100):
     xtrain, xtest, ytrain, ytest = train_test_split(dates, prices, test_size=0.2)
@@ -50,11 +50,11 @@ for _ in range(100):
             pickle.dump(reg, f)
         print(acc)
 
-#Load linear regression model
+#Lineares Regressionsmodell laden
 pickle_in = open("prediction.pickle", "rb")
 reg = pickle.load(pickle_in)
 
-#Get the average accuracy of the model
+#Durchschnittliche Genauigkeit des Modells 
 mean = 0
 for i in range(10):
   #Random Split Data
@@ -83,20 +83,18 @@ predictions = predictions.reshape(-1)
 predictions = pd.DataFrame(data={"Prediction_LR" : predictions})
 predictions.to_csv(f"Prediction_LR_{company}.csv", sep=',',index=False)
 
-# X future days
+# Future-Days Vorhersage
 future_predictions = np.array([])
 last = xtest[-1]
 for i in range(Constants.X_FUTURE):
   curr_prediction = reg.predict(np.array([last])).reshape(-1)
   print(curr_prediction)
   last = np.concatenate([last[1:], curr_prediction])
-  future_predictions = np.concatenate([future_predictions, curr_prediction]) #problema aqui
-#future_predictions = scaler.inverse_transform([future_predictions])[0]
+  future_predictions = np.concatenate([future_predictions, curr_prediction]) 
 print(future_predictions)
 
 #Plot Predicted VS Actual Data
-#plt.plot(xtest, ytest, color='green',linewidth=1, label= 'Actual Price') #plotting the initial datapoints
-plt.plot(future_predictions, color='blue', linewidth=3, label = 'Predicted Price') #plotting the line made by linear regression
+plt.plot(future_predictions, color='blue', linewidth=3, label = 'Predicted Price') #Einzeichnen der Linie aus der linearen Regression
 plt.title('Linear Regression | Time vs. Price ')
 plt.legend()
 plt.xlabel('Date Integer')
