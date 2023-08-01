@@ -11,8 +11,9 @@ import Constants
 
 df = pd.read_csv('^MDAXI_10y.csv')
 company = 'tuning_^MDAXI.DE(10Y)'
-window_size = 60 
 
+#Parameter
+window_size = 60 
 noepochs = 100 
 nobatchsize = 64 
 nounits = 100 
@@ -22,19 +23,20 @@ training_size = 0.8
 df = df['Close'].values
 df = df.reshape(-1, 1)
 
-dataset_train = np.array(df[:int(df.shape[0]*training_size)]) #75%
-dataset_test = np.array(df[int(df.shape[0]*training_size):]) #75%
+dataset_train = np.array(df[:int(df.shape[0]*training_size)])
+dataset_test = np.array(df[int(df.shape[0]*training_size):]) 
 
 # Datavorbereitung
 scaler = MinMaxScaler(feature_range=(0,1))
 dataset_train = scaler.fit_transform(dataset_train)
 dataset_test = scaler.transform(dataset_test)
 
+#Dataset-windowing
 def create_dataset(df):
     x = []
     y = []
-    for i in range(window_size, df.shape[0]): #50 affects len(prediction) , len(prediction) = len(x_test) + len(window)
-        x.append(df[i-window_size:i, 0])  #50
+    for i in range(window_size, df.shape[0]): #len(prediction) = len(x_test) + len(window)
+        x.append(df[i-window_size:i, 0])  
         y.append(df[i, 0])
     x = np.array(x)
     y = np.array(y)
@@ -49,7 +51,7 @@ x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 model = Sequential()
 
 #Layer specification
-model.add(GRU(units=nounits, return_sequences = True, input_shape=(x_train.shape[1],1))) #units can be changed, return = true for recurrent neural networks (as LSTM feeds information back, not only forward)
+model.add(GRU(units=nounits, return_sequences = True, input_shape=(x_train.shape[1],1))) 
 model.add(Dropout(dropout))
 model.add(GRU(units=nounits, return_sequences = True))
 model.add(Dropout(dropout))
@@ -61,8 +63,8 @@ x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(x_train, y_train, epochs=noepochs, batch_size=nobatchsize) #epochs25
-model.save('stock_prediction_GRU.h5') #model training operations, not required.
+model.fit(x_train, y_train, epochs=noepochs, batch_size=nobatchsize) 
+model.save('stock_prediction_GRU.h5') #model training operations
 
 model = load_model('stock_prediction_GRU.h5')
 
@@ -81,9 +83,9 @@ for i in range(Constants.X_FUTURE):
 future_predictions = scaler.inverse_transform([future_predictions])[0]
 print(future_predictions)
 
-###Join lines 
+#Linienverbindung und Future-Days Vorhersage CSV
 dicts = []
-last_day = len(y_test)-1 #-1 to reduce gap
+last_day = len(y_test)-1 
 for i in range(Constants.X_FUTURE):
   last_day = last_day + 1
   dicts.append({'Predictions':future_predictions[i], "Date": last_day})
@@ -104,6 +106,7 @@ plt.title(f"{company} Share Price Vs Prediction")
 plt.legend()
 plt.show()
 
+#CSV der vorhergesagten Daten
 predictions = predictions.reshape(-1)
 predictions = pd.DataFrame(data={"Prediction_GRU" : predictions})
 print(predictions)
